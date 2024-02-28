@@ -7,6 +7,25 @@ import java.util.Locale
 final case class Invoice(customer: String, performances: List[Performance])
 final case class Performance(playId: String, audience: Int)
 final case class Play(name: String, `type`: String) {
+  def calculateCosts(audience: Int): Int = {
+    var costs = 0
+    `type` match {
+      case "tragedy" => {
+        costs = 40000
+        if (audience > 30)
+          costs += 1000 * (audience - 30)
+      }
+      case "comedy" => {
+        costs = 30000
+        if (audience > 20)
+          costs += 10000 + 500 * (audience - 20)
+        costs += 300 * audience
+      }
+      case _ => throw new Exception("unknown type: " + `type`)
+    }
+    costs
+  }
+
   def calculateCredits(audience: Int): Int = {
     var playCredits = 0
     // Add credits for every attendee above 30
@@ -39,9 +58,8 @@ class StatementPrinter {
     var lines = ""
     for (perf <- invoice.performances) {
       val play = plays(perf.playId)
-      val performanceCost = calculatePerformanceCost(play, perf)
+      val performanceCost = play.calculateCosts(perf.audience)
 
-      // print line for this order
       lines += s"  ${play.name}: ${NumberFormat
           .getCurrencyInstance(culture)
           .format((performanceCost / 100).toDouble)} (${perf.audience} seats)$lineSeparator"
@@ -63,30 +81,10 @@ class StatementPrinter {
     var totalAmount = 0
     for (perf <- invoice.performances) {
       val play = plays(perf.playId)
-      val performanceCost = calculatePerformanceCost(play, perf)
+      val performanceCost = play.calculateCosts(perf.audience)
       totalAmount += performanceCost
     }
     totalAmount
-  }
-
-  private def calculatePerformanceCost(play: Play, perf: Performance) = {
-    var performanceCost = 0
-
-    play.`type` match {
-      case "tragedy" => {
-        performanceCost = 40000
-        if (perf.audience > 30)
-          performanceCost += 1000 * (perf.audience - 30)
-      }
-      case "comedy" => {
-        performanceCost = 30000
-        if (perf.audience > 20)
-          performanceCost += 10000 + 500 * (perf.audience - 20)
-        performanceCost += 300 * perf.audience
-      }
-      case _ => throw new Exception("unknown type: " + play.`type`)
-    }
-    performanceCost
   }
 
   private def calculateTotalCredits(
