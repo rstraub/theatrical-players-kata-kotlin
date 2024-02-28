@@ -12,18 +12,12 @@ class StatementPrinter {
   private val culture = Locale.US
 
   def print(invoice: Invoice, plays: Map[String, Play]): String = {
-    var totalAmount = 0
-    for (perf <- invoice.performances) {
-      val play = plays(perf.playId)
-      val performanceCost = calculatePerformanceCost(play, perf)
-      totalAmount += performanceCost
-    }
-
+    val totalCosts: Int = calculateTotalCosts(invoice, plays)
     val totalCredits = calculateTotalCredits(invoice, plays)
 
     var result = createHeader(invoice)
     result += createLines(invoice, plays)
-    result += createFooter(totalAmount, totalCredits)
+    result += createFooter(totalCosts, totalCredits)
 
     result
   }
@@ -50,6 +44,19 @@ class StatementPrinter {
       s"Amount owed is ${NumberFormat.getCurrencyInstance(culture).format(totalAmount / 100d)}$lineSeparator"
     val line2 = s"You earned ${volumeCredits} credits$lineSeparator"
     line1 + line2
+  }
+
+  private def calculateTotalCosts(
+      invoice: Invoice,
+      plays: Map[String, Play]
+  ) = {
+    var totalAmount = 0
+    for (perf <- invoice.performances) {
+      val play = plays(perf.playId)
+      val performanceCost = calculatePerformanceCost(play, perf)
+      totalAmount += performanceCost
+    }
+    totalAmount
   }
 
   private def calculatePerformanceCost(play: Play, perf: Performance) = {
