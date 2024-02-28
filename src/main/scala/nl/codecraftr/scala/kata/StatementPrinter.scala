@@ -15,7 +15,6 @@ class StatementPrinter {
     var result = createHeader(invoice)
 
     var totalAmount = 0
-    var volumeCredits = 0
 
     for (perf <- invoice.performances) {
       val play = plays(perf.playId)
@@ -37,21 +36,34 @@ class StatementPrinter {
       }
       totalAmount += thisAmount;
 
-      // add volume credits
-      volumeCredits += Math.max(perf.audience - 30, 0)
-      // add extra credit for every ten comedy attendees
-      if ("comedy" == play.`type`)
-        volumeCredits += Math.floor(perf.audience / 5d).toInt
-
       // print line for this order
       result += s"  ${play.name}: ${NumberFormat
           .getCurrencyInstance(culture)
           .format((thisAmount / 100).toDouble)} (${perf.audience} seats)$lineSeparator"
     }
 
-    result += createFooter(totalAmount, volumeCredits)
+    val totalCredits = calculateTotalCredits(invoice, plays)
+
+    result += createFooter(totalAmount, totalCredits)
 
     result
+  }
+
+  private def calculateTotalCredits(
+      invoice: Invoice,
+      plays: Map[String, Play]
+  ) = {
+    var totalCredits = 0
+    for (perf <- invoice.performances) {
+      val play = plays(perf.playId)
+
+      // add volume credits
+      totalCredits += Math.max(perf.audience - 30, 0)
+      // add extra credit for every ten comedy attendees
+      if ("comedy" == play.`type`)
+        totalCredits += Math.floor(perf.audience / 5d).toInt
+    }
+    totalCredits
   }
 
   private def createHeader(invoice: Invoice) =
