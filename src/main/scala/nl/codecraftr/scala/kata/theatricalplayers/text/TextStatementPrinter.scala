@@ -1,6 +1,6 @@
 package nl.codecraftr.scala.kata.theatricalplayers.text
 
-import nl.codecraftr.scala.kata.theatricalplayers.{Invoice, Play}
+import nl.codecraftr.scala.kata.theatricalplayers.{Invoice, Performance, Play}
 
 import java.lang.System.lineSeparator
 import java.text.NumberFormat
@@ -27,13 +27,18 @@ class TextStatementPrinter {
     var lines = ""
     for (perf <- invoice.performances) {
       val play = plays(perf.playId)
-      val performanceCost = play.calculateCosts(perf.audience)
 
-      lines += s"  ${play.name}: ${NumberFormat
-          .getCurrencyInstance(culture)
-          .format((performanceCost / 100).toDouble)} (${perf.audience} seats)$lineSeparator"
+      lines += playLine(play, perf)
     }
     lines
+  }
+
+  private def playLine(play: Play, perf: Performance) = {
+    val performanceCost = play.calculateCosts(perf.audience)
+    val playLine = s"  ${play.name}: ${NumberFormat
+        .getCurrencyInstance(culture)
+        .format((performanceCost / 100).toDouble)} (${perf.audience} seats)$lineSeparator"
+    playLine
   }
 
   private def createFooter(totalCosts: Int, volumeCredits: Int) = {
