@@ -23,21 +23,16 @@ class TextStatementPrinter {
   private def createHeader(customer: String) =
     s"Statement for $customer$lineSeparator"
 
-  private def createLines(invoice: Invoice, plays: Map[String, Play]) = {
-    var lines = ""
-    for (perf <- invoice.performances) {
-      val play = plays(perf.playId)
+  private def createLines(invoice: Invoice, plays: Map[String, Play]) =
+    invoice.performances
+      .map(perf => playLine(plays(perf.playId), perf.audience))
+      .mkString("")
 
-      lines += playLine(play, perf)
-    }
-    lines
-  }
-
-  private def playLine(play: Play, perf: Performance) = {
-    val performanceCost = play.calculateCosts(perf.audience)
+  private def playLine(play: Play, audience: Int) = {
+    val performanceCost = play.calculateCosts(audience)
     val playLine = s"  ${play.name}: ${NumberFormat
         .getCurrencyInstance(culture)
-        .format((performanceCost / 100).toDouble)} (${perf.audience} seats)$lineSeparator"
+        .format((performanceCost / 100).toDouble)} ($audience seats)$lineSeparator"
     playLine
   }
 
