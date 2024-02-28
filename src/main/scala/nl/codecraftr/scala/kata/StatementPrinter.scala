@@ -16,6 +16,18 @@ final case class Invoice(customer: String, performances: List[Performance]) {
     }
     totalAmount
   }
+
+  def calculateCredits(
+      plays: Map[String, Play]
+  ): Int = {
+    var totalCredits = 0
+    for (perf <- performances) {
+      val play = plays(perf.playId)
+
+      totalCredits += play.calculateCredits(perf.audience)
+    }
+    totalCredits
+  }
 }
 
 final case class Performance(playId: String, audience: Int)
@@ -55,7 +67,7 @@ class StatementPrinter {
 
   def print(invoice: Invoice, plays: Map[String, Play]): String = {
     val totalCosts = invoice.calculateCosts(plays)
-    val totalCredits = calculateTotalCredits(invoice, plays)
+    val totalCredits = invoice.calculateCredits(plays)
 
     var result = createHeader(invoice)
     result += createLines(invoice, plays)
@@ -85,18 +97,5 @@ class StatementPrinter {
       s"Amount owed is ${NumberFormat.getCurrencyInstance(culture).format(totalCosts / 100d)}$lineSeparator"
     val line2 = s"You earned $volumeCredits credits$lineSeparator"
     line1 + line2
-  }
-
-  private def calculateTotalCredits(
-      invoice: Invoice,
-      plays: Map[String, Play]
-  ) = {
-    var totalCredits = 0
-    for (perf <- invoice.performances) {
-      val play = plays(perf.playId)
-
-      totalCredits += play.calculateCredits(perf.audience)
-    }
-    totalCredits
   }
 }
