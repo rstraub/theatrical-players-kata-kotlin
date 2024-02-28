@@ -4,7 +4,20 @@ import java.lang.System.lineSeparator
 import java.text.NumberFormat
 import java.util.Locale
 
-final case class Invoice(customer: String, performances: List[Performance])
+final case class Invoice(customer: String, performances: List[Performance]) {
+  def calculateCosts(
+      plays: Map[String, Play]
+  ): Int = {
+    var totalAmount = 0
+    for (perf <- performances) {
+      val play = plays(perf.playId)
+      val performanceCost = play.calculateCosts(perf.audience)
+      totalAmount += performanceCost
+    }
+    totalAmount
+  }
+}
+
 final case class Performance(playId: String, audience: Int)
 final case class Play(name: String, `type`: String) {
   def calculateCosts(audience: Int): Int = {
@@ -41,7 +54,7 @@ class StatementPrinter {
   private val culture = Locale.US
 
   def print(invoice: Invoice, plays: Map[String, Play]): String = {
-    val totalCosts: Int = calculateTotalCosts(invoice, plays)
+    val totalCosts = invoice.calculateCosts(plays)
     val totalCredits = calculateTotalCredits(invoice, plays)
 
     var result = createHeader(invoice)
@@ -67,24 +80,11 @@ class StatementPrinter {
     lines
   }
 
-  private def createFooter(totalAmount: Int, volumeCredits: Int) = {
+  private def createFooter(totalCosts: Int, volumeCredits: Int) = {
     val line1 =
-      s"Amount owed is ${NumberFormat.getCurrencyInstance(culture).format(totalAmount / 100d)}$lineSeparator"
-    val line2 = s"You earned ${volumeCredits} credits$lineSeparator"
+      s"Amount owed is ${NumberFormat.getCurrencyInstance(culture).format(totalCosts / 100d)}$lineSeparator"
+    val line2 = s"You earned $volumeCredits credits$lineSeparator"
     line1 + line2
-  }
-
-  private def calculateTotalCosts(
-      invoice: Invoice,
-      plays: Map[String, Play]
-  ) = {
-    var totalAmount = 0
-    for (perf <- invoice.performances) {
-      val play = plays(perf.playId)
-      val performanceCost = play.calculateCosts(perf.audience)
-      totalAmount += performanceCost
-    }
-    totalAmount
   }
 
   private def calculateTotalCredits(
