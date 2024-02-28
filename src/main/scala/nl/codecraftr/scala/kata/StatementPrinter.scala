@@ -6,7 +6,17 @@ import java.util.Locale
 
 final case class Invoice(customer: String, performances: List[Performance])
 final case class Performance(playId: String, audience: Int)
-final case class Play(name: String, `type`: String)
+final case class Play(name: String, `type`: String) {
+  def calculateCredits(audience: Int): Int = {
+    var playCredits = 0
+    // Add credits for every attendee above 30
+    playCredits += Math.max(audience - 30, 0)
+    // add extra credit for every ten comedy attendees
+    if ("comedy" == `type`)
+      playCredits += Math.floor(audience / 5d).toInt
+    playCredits
+  }
+}
 
 class StatementPrinter {
   private val culture = Locale.US
@@ -87,18 +97,8 @@ class StatementPrinter {
     for (perf <- invoice.performances) {
       val play = plays(perf.playId)
 
-      totalCredits += calculatePlayCredits(play, perf.audience)
+      totalCredits += play.calculateCredits(perf.audience)
     }
     totalCredits
-  }
-
-  private def calculatePlayCredits(play: Play, audience: Int) = {
-    var playCredits = 0
-    // add volume credits
-    playCredits += Math.max(audience - 30, 0)
-    // add extra credit for every ten comedy attendees
-    if ("comedy" == play.`type`)
-      playCredits += Math.floor(audience / 5d).toInt
-    playCredits
   }
 }
