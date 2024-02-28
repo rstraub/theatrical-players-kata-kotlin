@@ -1,10 +1,12 @@
-package nl.codecraftr.scala.kata
+package nl.codecraftr.scala.kata.theatricalplayers.text
+
+import nl.codecraftr.scala.kata.theatricalplayers.{Invoice, Play}
 
 import java.lang.System.lineSeparator
 import java.text.NumberFormat
 import java.util.Locale
 
-class StatementPrinter {
+class TextStatementPrinter {
   private val culture = Locale.US
 
   def print(invoice: Invoice, plays: Map[String, Play]): String = {

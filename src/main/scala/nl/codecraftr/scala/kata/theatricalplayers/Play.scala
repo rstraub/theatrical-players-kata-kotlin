@@ -1,4 +1,4 @@
-package nl.codecraftr.scala.kata
+package nl.codecraftr.scala.kata.theatricalplayers
 
 final case class Play(name: String, `type`: String) {
   def calculateCosts(audience: Int): Int = {

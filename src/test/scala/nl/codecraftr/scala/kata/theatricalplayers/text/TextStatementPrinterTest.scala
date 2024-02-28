@@ -1,9 +1,10 @@
-package nl.codecraftr.scala.kata
+package nl.codecraftr.scala.kata.theatricalplayers.text
 
+import nl.codecraftr.scala.kata.theatricalplayers.{Invoice, Performance, Play}
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 
-class StatementPrinterTest extends AnyFunSuite with Matchers {
+class TextStatementPrinterTest extends AnyFunSuite with Matchers {
   test("statement example") {
     val plays = Map(
       "hamlet" -> Play("Hamlet", "tragedy"),
@@ -20,7 +21,7 @@ class StatementPrinterTest extends AnyFunSuite with Matchers {
       )
     )
 
-    val statementPrinter = new StatementPrinter()
+    val statementPrinter = new TextStatementPrinter()
     val result = statementPrinter.print(invoice, plays)
 
     result shouldBe
@@ -47,7 +48,7 @@ class StatementPrinterTest extends AnyFunSuite with Matchers {
       )
     )
 
-    val statementPrinter = new StatementPrinter()
+    val statementPrinter = new TextStatementPrinter()
     assertThrows[Exception] {
       statementPrinter.print(invoice, plays)
     }

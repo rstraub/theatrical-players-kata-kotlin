@@ -1,4 +1,4 @@
-package nl.codecraftr.scala.kata
+package nl.codecraftr.scala.kata.theatricalplayers
 
 final case class Invoice(customer: String, performances: List[Performance]) {
   def calculateCosts(
