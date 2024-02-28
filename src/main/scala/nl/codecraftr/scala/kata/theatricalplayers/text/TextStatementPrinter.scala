@@ -13,15 +13,15 @@ class TextStatementPrinter {
     val totalCosts = invoice.calculateCosts(plays)
     val totalCredits = invoice.calculateCredits(plays)
 
-    var result = createHeader(invoice)
+    var result = createHeader(invoice.customer)
     result += createLines(invoice, plays)
     result += createFooter(totalCosts, totalCredits)
 
     result
   }
 
-  private def createHeader(invoice: Invoice) =
-    s"Statement for ${invoice.customer}$lineSeparator"
+  private def createHeader(customer: String) =
+    s"Statement for $customer$lineSeparator"
 
   private def createLines(invoice: Invoice, plays: Map[String, Play]) = {
     var lines = ""
