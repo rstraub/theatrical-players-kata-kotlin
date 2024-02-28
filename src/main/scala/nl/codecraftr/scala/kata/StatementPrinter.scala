@@ -15,31 +15,15 @@ class StatementPrinter {
     var result = createHeader(invoice)
 
     var totalAmount = 0
-
     for (perf <- invoice.performances) {
       val play = plays(perf.playId)
-      var thisAmount = 0
-
-      play.`type` match {
-        case "tragedy" => {
-          thisAmount = 40000
-          if (perf.audience > 30)
-            thisAmount += 1000 * (perf.audience - 30)
-        }
-        case "comedy" => {
-          thisAmount = 30000
-          if (perf.audience > 20)
-            thisAmount += 10000 + 500 * (perf.audience - 20)
-          thisAmount += 300 * perf.audience
-        }
-        case _ => throw new Exception("unknown type: " + play.`type`)
-      }
-      totalAmount += thisAmount;
+      val performanceCost = calculatePerformanceCost(play, perf)
+      totalAmount += performanceCost
 
       // print line for this order
       result += s"  ${play.name}: ${NumberFormat
           .getCurrencyInstance(culture)
-          .format((thisAmount / 100).toDouble)} (${perf.audience} seats)$lineSeparator"
+          .format((performanceCost / 100).toDouble)} (${perf.audience} seats)$lineSeparator"
     }
 
     val totalCredits = calculateTotalCredits(invoice, plays)
@@ -47,6 +31,26 @@ class StatementPrinter {
     result += createFooter(totalAmount, totalCredits)
 
     result
+  }
+
+  private def calculatePerformanceCost(play: Play, perf: Performance) = {
+    var performanceCost = 0
+
+    play.`type` match {
+      case "tragedy" => {
+        performanceCost = 40000
+        if (perf.audience > 30)
+          performanceCost += 1000 * (perf.audience - 30)
+      }
+      case "comedy" => {
+        performanceCost = 30000
+        if (perf.audience > 20)
+          performanceCost += 10000 + 500 * (perf.audience - 20)
+        performanceCost += 300 * perf.audience
+      }
+      case _ => throw new Exception("unknown type: " + play.`type`)
+    }
+    performanceCost
   }
 
   private def calculateTotalCredits(
