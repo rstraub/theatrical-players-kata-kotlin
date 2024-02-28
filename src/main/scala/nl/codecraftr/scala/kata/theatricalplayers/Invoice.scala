@@ -15,13 +15,8 @@ final case class Invoice(customer: String, performances: List[Performance]) {
 
   def calculateCredits(
       plays: Map[String, Play]
-  ): Int = {
-    var totalCredits = 0
-    for (perf <- performances) {
-      val play = plays(perf.playId)
-
-      totalCredits += play.calculateCredits(perf.audience)
-    }
-    totalCredits
-  }
+  ): Int =
+    performances
+      .map(perf => plays(perf.playId).calculateCredits(perf.audience))
+      .sum
 }
