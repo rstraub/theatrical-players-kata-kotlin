@@ -87,12 +87,18 @@ class StatementPrinter {
     for (perf <- invoice.performances) {
       val play = plays(perf.playId)
 
-      // add volume credits
-      totalCredits += Math.max(perf.audience - 30, 0)
-      // add extra credit for every ten comedy attendees
-      if ("comedy" == play.`type`)
-        totalCredits += Math.floor(perf.audience / 5d).toInt
+      totalCredits += calculatePlayCredits(play, perf)
     }
     totalCredits
+  }
+
+  private def calculatePlayCredits(play: Play, perf: Performance) = {
+    var playCredits = 0
+    // add volume credits
+    playCredits += Math.max(perf.audience - 30, 0)
+    // add extra credit for every ten comedy attendees
+    if ("comedy" == play.`type`)
+      playCredits += Math.floor(perf.audience / 5d).toInt
+    playCredits
   }
 }
