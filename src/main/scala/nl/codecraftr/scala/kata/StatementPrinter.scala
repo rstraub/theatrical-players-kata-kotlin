@@ -9,11 +9,12 @@ final case class Performance(playId: String, audience: Int)
 final case class Play(name: String, `type`: String)
 
 class StatementPrinter {
+  private val culture = Locale.US
+
   def print(invoice: Invoice, plays: Map[String, Play]): String = {
     var totalAmount = 0
     var volumeCredits = 0
     var result = s"Statement for ${invoice.customer}$lineSeparator"
-    var culture = Locale.US
 
     for (perf <- invoice.performances) {
       val play = plays(perf.playId)
