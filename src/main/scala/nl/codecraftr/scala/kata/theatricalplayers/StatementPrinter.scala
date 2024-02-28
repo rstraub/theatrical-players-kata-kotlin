@@ -1,18 +1,18 @@
-package nl.codecraftr.scala.kata.theatricalplayers.text
-
-import nl.codecraftr.scala.kata.theatricalplayers.{Invoice, Performance, Play}
+package nl.codecraftr.scala.kata.theatricalplayers
 
 import java.lang.System.lineSeparator
 import java.text.NumberFormat
 import java.util.Locale
 
-class TextStatementPrinter {
+// TODO seems like an intermediate class is missing, such as Statement
+class StatementPrinter {
   private val culture = Locale.US
 
   def print(invoice: Invoice, plays: Map[String, Play]): String = {
     val totalCosts = invoice.calculateCosts(plays)
     val totalCredits = invoice.calculateCredits(plays)
 
+    // TODO this could be part of a statement printer strategy
     var result = createHeader(invoice.customer)
     result += createLines(invoice, plays)
     result += createFooter(totalCosts, totalCredits)
