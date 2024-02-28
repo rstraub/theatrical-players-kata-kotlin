@@ -12,10 +12,10 @@ class StatementPrinter {
   private val culture = Locale.US
 
   def print(invoice: Invoice, plays: Map[String, Play]): String = {
+    var result = createHeader(invoice)
+
     var totalAmount = 0
     var volumeCredits = 0
-
-    var result = createHeader(invoice)
 
     for (perf <- invoice.performances) {
       val play = plays(perf.playId)
@@ -35,6 +35,8 @@ class StatementPrinter {
         }
         case _ => throw new Exception("unknown type: " + play.`type`)
       }
+      totalAmount += thisAmount;
+
       // add volume credits
       volumeCredits += Math.max(perf.audience - 30, 0)
       // add extra credit for every ten comedy attendees
@@ -45,7 +47,6 @@ class StatementPrinter {
       result += s"  ${play.name}: ${NumberFormat
           .getCurrencyInstance(culture)
           .format((thisAmount / 100).toDouble)} (${perf.audience} seats)$lineSeparator"
-      totalAmount += thisAmount;
     }
 
     result += createFooter(totalAmount, volumeCredits)
@@ -53,7 +54,8 @@ class StatementPrinter {
     result
   }
 
-  private def createHeader(invoice: Invoice) = s"Statement for ${invoice.customer}$lineSeparator"
+  private def createHeader(invoice: Invoice) =
+    s"Statement for ${invoice.customer}$lineSeparator"
 
   private def createFooter(totalAmount: Int, volumeCredits: Int) = {
     val line1 =
