@@ -14,7 +14,8 @@ class StatementPrinter {
   def print(invoice: Invoice, plays: Map[String, Play]): String = {
     var totalAmount = 0
     var volumeCredits = 0
-    var result = s"Statement for ${invoice.customer}$lineSeparator"
+
+    var result = createHeader(invoice)
 
     for (perf <- invoice.performances) {
       val play = plays(perf.playId)
@@ -46,9 +47,18 @@ class StatementPrinter {
           .format((thisAmount / 100).toDouble)} (${perf.audience} seats)$lineSeparator"
       totalAmount += thisAmount;
     }
-    result += s"Amount owed is ${NumberFormat.getCurrencyInstance(culture).format(totalAmount / 100d)}$lineSeparator"
-    result += s"You earned ${volumeCredits} credits$lineSeparator"
+
+    result += createFooter(totalAmount, volumeCredits)
 
     result
+  }
+
+  private def createHeader(invoice: Invoice) = s"Statement for ${invoice.customer}$lineSeparator"
+
+  private def createFooter(totalAmount: Int, volumeCredits: Int) = {
+    val line1 =
+      s"Amount owed is ${NumberFormat.getCurrencyInstance(culture).format(totalAmount / 100d)}$lineSeparator"
+    val line2 = s"You earned ${volumeCredits} credits$lineSeparator"
+    line1 + line2
   }
 }
