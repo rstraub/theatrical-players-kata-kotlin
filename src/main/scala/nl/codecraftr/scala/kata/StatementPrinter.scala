@@ -4,64 +4,6 @@ import java.lang.System.lineSeparator
 import java.text.NumberFormat
 import java.util.Locale
 
-final case class Invoice(customer: String, performances: List[Performance]) {
-  def calculateCosts(
-      plays: Map[String, Play]
-  ): Int = {
-    var totalAmount = 0
-    for (perf <- performances) {
-      val play = plays(perf.playId)
-      val performanceCost = play.calculateCosts(perf.audience)
-      totalAmount += performanceCost
-    }
-    totalAmount
-  }
-
-  def calculateCredits(
-      plays: Map[String, Play]
-  ): Int = {
-    var totalCredits = 0
-    for (perf <- performances) {
-      val play = plays(perf.playId)
-
-      totalCredits += play.calculateCredits(perf.audience)
-    }
-    totalCredits
-  }
-}
-
-final case class Performance(playId: String, audience: Int)
-final case class Play(name: String, `type`: String) {
-  def calculateCosts(audience: Int): Int = {
-    var costs = 0
-    `type` match {
-      case "tragedy" => {
-        costs = 40000
-        if (audience > 30)
-          costs += 1000 * (audience - 30)
-      }
-      case "comedy" => {
-        costs = 30000
-        if (audience > 20)
-          costs += 10000 + 500 * (audience - 20)
-        costs += 300 * audience
-      }
-      case _ => throw new Exception("unknown type: " + `type`)
-    }
-    costs
-  }
-
-  def calculateCredits(audience: Int): Int = {
-    var playCredits = 0
-    // Add credits for every attendee above 30
-    playCredits += Math.max(audience - 30, 0)
-    // add extra credit for every ten comedy attendees
-    if ("comedy" == `type`)
-      playCredits += Math.floor(audience / 5d).toInt
-    playCredits
-  }
-}
-
 class StatementPrinter {
   private val culture = Locale.US
 
