@@ -26,8 +26,8 @@ final case class Comedy(name: String) extends Play {
   }
 
   override def calculateCredits(audience: Int): Int = {
-      // add extra credit for every ten comedy attendees
-      val bonusComedyCredits = Math.floor(audience / 5d).toInt
-      super.calculateCredits(audience) + bonusComedyCredits
+    // add extra credit for every ten comedy attendees
+    val bonusComedyCredits = Math.floor(audience / 5d).toInt
+    super.calculateCredits(audience) + bonusComedyCredits
   }
 }

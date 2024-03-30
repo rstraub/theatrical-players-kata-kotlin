@@ -1,7 +1,13 @@
 package nl.codecraftr.scala.kata.theatricalplayers.text
 
-import nl.codecraftr.scala.kata.theatricalplayers._
-import nl.codecraftr.scala.kata.theatricalplayers.statements.{Comedy, History, Invoice, Pastoral, Performance, Tragedy}
+import nl.codecraftr.scala.kata.theatricalplayers.statements.{
+  Comedy,
+  History,
+  Invoice,
+  Pastoral,
+  Performance,
+  Tragedy
+}
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 

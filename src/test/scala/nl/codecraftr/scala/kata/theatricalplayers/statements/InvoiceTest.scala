@@ -1,6 +1,9 @@
 package nl.codecraftr.scala.kata.theatricalplayers.statements
 
-import nl.codecraftr.scala.kata.theatricalplayers.statements.PlayTdb.{aComedy, aTragedy}
+import nl.codecraftr.scala.kata.theatricalplayers.statements.PlayTdb.{
+  aComedy,
+  aTragedy
+}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
@@ -10,7 +13,7 @@ class InvoiceTest extends AnyFlatSpec with Matchers {
       "BigCo",
       List(
         Performance(aTragedy, 1),
-        Performance(aComedy, 1),
+        Performance(aComedy, 1)
       )
     )
 
@@ -22,7 +25,7 @@ class InvoiceTest extends AnyFlatSpec with Matchers {
       "BigCo",
       List(
         Performance(aTragedy, 31),
-        Performance(aComedy, 5),
+        Performance(aComedy, 5)
       )
     )
 
