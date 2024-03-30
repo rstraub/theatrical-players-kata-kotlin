@@ -1,17 +1,13 @@
 package nl.codecraftr.scala.kata.theatricalplayers
 
 final case class Invoice(customer: String, performances: List[Performance]) {
-  def calculateCosts(
-      plays: Map[String, Play]
-  ): Int =
+  def calculateCosts(): Int =
     performances
-      .map(perf => plays(perf.playId).calculateCosts(perf.audience))
+      .map(perf => perf.play.calculateCosts(perf.audience))
       .sum
 
-  def calculateCredits(
-      plays: Map[String, Play]
-  ): Int =
+  def calculateCredits(): Int =
     performances
-      .map(perf => plays(perf.playId).calculateCredits(perf.audience))
+      .map(perf => perf.play.calculateCredits(perf.audience))
       .sum
 }

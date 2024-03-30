@@ -5,23 +5,17 @@ import org.scalatest.matchers.should.Matchers
 
 class StatementPrinterTest extends AnyFunSuite with Matchers {
   test("statement example") {
-    val plays = Map(
-      "hamlet" -> Play("Hamlet", "tragedy"),
-      "as-like" -> Play("As You Like It", "comedy"),
-      "othello" -> Play("Othello", "tragedy")
-    )
-
     val invoice = Invoice(
       "BigCo",
       List(
-        Performance("hamlet", 55),
-        Performance("as-like", 35),
-        Performance("othello", 40)
+        Performance(Play("Hamlet", "tragedy"), 55),
+        Performance(Play("As You Like It", "comedy"), 35),
+        Performance(Play("Othello", "tragedy"), 40)
       )
     )
 
     val statementPrinter = new StatementPrinter()
-    val result = statementPrinter.print(invoice, plays)
+    val result = statementPrinter.print(invoice)
 
     result shouldBe
       """Statement for BigCo
@@ -34,22 +28,17 @@ class StatementPrinterTest extends AnyFunSuite with Matchers {
   }
 
   test("statement with new play types") {
-    val plays = Map(
-      "henry-v" -> Play("Henry V", "history"),
-      "as-like" -> Play("As You Like It", "pastoral")
-    )
-
     val invoice = Invoice(
       "BigCoII",
       List(
-        Performance("henry-v", 53),
-        Performance("as-like", 55)
+        Performance(Play("Henry V", "history"), 53),
+        Performance(Play("As You Like It", "pastoral"), 55)
       )
     )
 
     val statementPrinter = new StatementPrinter()
     assertThrows[Exception] {
-      statementPrinter.print(invoice, plays)
+      statementPrinter.print(invoice)
     }
   }
 }

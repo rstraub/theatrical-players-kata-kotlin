@@ -8,13 +8,13 @@ import java.util.Locale
 class StatementPrinter {
   private val culture = Locale.US
 
-  def print(invoice: Invoice, plays: Map[String, Play]): String = {
-    val totalCosts = invoice.calculateCosts(plays)
-    val totalCredits = invoice.calculateCredits(plays)
+  def print(invoice: Invoice): String = {
+    val totalCosts = invoice.calculateCosts()
+    val totalCredits = invoice.calculateCredits()
 
     // TODO this could be part of a statement printer strategy
     var result = createHeader(invoice.customer)
-    result += createLines(invoice, plays)
+    result += createLines(invoice)
     result += createFooter(totalCosts, totalCredits)
 
     result
@@ -23,9 +23,9 @@ class StatementPrinter {
   private def createHeader(customer: String) =
     s"Statement for $customer$lineSeparator"
 
-  private def createLines(invoice: Invoice, plays: Map[String, Play]) =
+  private def createLines(invoice: Invoice) =
     invoice.performances
-      .map(perf => playLine(plays(perf.playId), perf.audience))
+      .map(perf => playLine(perf.play, perf.audience))
       .mkString("")
 
   private def playLine(play: Play, audience: Int) = {
