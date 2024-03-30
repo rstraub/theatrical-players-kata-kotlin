@@ -9,13 +9,10 @@ class StatementPrinter {
   private val culture = Locale.US
 
   def print(invoice: Invoice): String = {
-    val totalCosts = invoice.calculateCosts()
-    val totalCredits = invoice.calculateCredits()
-
     // TODO this could be part of a statement printer strategy
     var result = createHeader(invoice.customer)
     result += createLines(invoice)
-    result += createFooter(totalCosts, totalCredits)
+    result += createFooter(invoice.totalCosts, invoice.totalCredits)
 
     result
   }

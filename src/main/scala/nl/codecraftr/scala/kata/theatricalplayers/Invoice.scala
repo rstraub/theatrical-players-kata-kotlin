@@ -1,12 +1,12 @@
 package nl.codecraftr.scala.kata.theatricalplayers
 
 final case class Invoice(customer: String, performances: List[Performance]) {
-  def calculateCosts(): Int =
+  lazy val totalCosts: Int =
     performances
       .map(perf => perf.play.calculateCosts(perf.audience))
       .sum
 
-  def calculateCredits(): Int =
+  lazy val totalCredits: Int =
     performances
       .map(perf => perf.play.calculateCredits(perf.audience))
       .sum
