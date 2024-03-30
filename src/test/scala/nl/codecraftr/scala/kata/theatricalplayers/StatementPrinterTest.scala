@@ -8,9 +8,11 @@ class StatementPrinterTest extends AnyFunSuite with Matchers {
     val invoice = Invoice(
       "BigCo",
       List(
-        Performance(Play("Hamlet", "tragedy"), 55),
-        Performance(Play("As You Like It", "comedy"), 35),
-        Performance(Play("Othello", "tragedy"), 40)
+        Performance(Tragedy("Hamlet"), 55),
+        Performance(Comedy("As You Like It"), 35),
+        Performance(Tragedy("Othello"), 40),
+        Performance(History("Henry V"), 53),
+        Performance(Pastoral("As You Like It"), 55)
       )
     )
 
@@ -22,23 +24,10 @@ class StatementPrinterTest extends AnyFunSuite with Matchers {
               |  Hamlet: $650.00 (55 seats)
               |  As You Like It: $580.00 (35 seats)
               |  Othello: $500.00 (40 seats)
-              |Amount owed is $1,730.00
-              |You earned 47 credits
+              |  Henry V: $630.00 (53 seats)
+              |  As You Like It: $650.00 (55 seats)
+              |Amount owed is $3,010.00
+              |You earned 95 credits
               |""".stripMargin
-  }
-
-  test("statement with new play types") {
-    val invoice = Invoice(
-      "BigCoII",
-      List(
-        Performance(Play("Henry V", "history"), 53),
-        Performance(Play("As You Like It", "pastoral"), 55)
-      )
-    )
-
-    val statementPrinter = new StatementPrinter()
-    assertThrows[Exception] {
-      statementPrinter.print(invoice)
-    }
   }
 }
