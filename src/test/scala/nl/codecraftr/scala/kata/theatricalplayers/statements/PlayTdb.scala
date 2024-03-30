@@ -1,4 +1,4 @@
-package nl.codecraftr.scala.kata.theatricalplayers
+package nl.codecraftr.scala.kata.theatricalplayers.statements
 
 object PlayTdb {
   val aTragedy: Tragedy = Tragedy("Hamlet")

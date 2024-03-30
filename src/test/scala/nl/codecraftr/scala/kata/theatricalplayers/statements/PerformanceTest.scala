@@ -1,6 +1,7 @@
-package nl.codecraftr.scala.kata.theatricalplayers
+package nl.codecraftr.scala.kata.theatricalplayers.statements
 
-import nl.codecraftr.scala.kata.theatricalplayers.PlayTdb.{aComedy, aTragedy}
+import nl.codecraftr.scala.kata.theatricalplayers.statements
+import nl.codecraftr.scala.kata.theatricalplayers.statements.PlayTdb.{aComedy, aTragedy}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.prop.TableDrivenPropertyChecks
@@ -32,7 +33,7 @@ class PerformanceTest
     )
 
     forAll(nonComedy) { (play, audience, expected) =>
-      val performance = Performance(play, audience)
+      val performance = statements.Performance(play, audience)
       performance.totalCosts shouldBe expected
     }
   }
@@ -72,7 +73,7 @@ class PerformanceTest
     )
 
     forAll(nonComedy) { (play, audience) =>
-      val performance = Performance(play, audience)
+      val performance = statements.Performance(play, audience)
       performance.totalCredits shouldBe 0
     }
   }
@@ -85,7 +86,7 @@ class PerformanceTest
     )
 
     forAll(nonComedy) { (play, audience, expected) =>
-      val performance = Performance(play, audience)
+      val performance = statements.Performance(play, audience)
       performance.totalCredits shouldBe expected
     }
   }

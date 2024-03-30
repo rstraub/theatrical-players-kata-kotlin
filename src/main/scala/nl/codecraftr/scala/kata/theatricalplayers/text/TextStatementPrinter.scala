@@ -1,6 +1,7 @@
 package nl.codecraftr.scala.kata.theatricalplayers.text
 
-import nl.codecraftr.scala.kata.theatricalplayers.{Invoice, Performance, StatementPrinter, formatCosts}
+import nl.codecraftr.scala.kata.theatricalplayers.statements.{Invoice, Performance, StatementPrinter}
+import nl.codecraftr.scala.kata.theatricalplayers.formatCosts
 
 import java.lang.System.lineSeparator
 

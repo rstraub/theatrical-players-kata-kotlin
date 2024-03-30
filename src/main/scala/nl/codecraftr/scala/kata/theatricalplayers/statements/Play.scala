@@ -1,4 +1,4 @@
-package nl.codecraftr.scala.kata.theatricalplayers
+package nl.codecraftr.scala.kata.theatricalplayers.statements
 
 sealed trait Play {
   def name: String

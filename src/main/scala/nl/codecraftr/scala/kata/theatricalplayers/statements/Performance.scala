@@ -1,4 +1,4 @@
-package nl.codecraftr.scala.kata.theatricalplayers
+package nl.codecraftr.scala.kata.theatricalplayers.statements
 
 final case class Performance(play: Play, audience: Int) {
   lazy val totalCosts: Int = play.calculateCosts(audience)

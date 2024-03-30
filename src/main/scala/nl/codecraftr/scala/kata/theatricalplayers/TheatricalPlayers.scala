@@ -1,6 +1,7 @@
 package nl.codecraftr.scala.kata.theatricalplayers
 
 import nl.codecraftr.scala.kata.theatricalplayers.html.HtmlStatementPrinter
+import nl.codecraftr.scala.kata.theatricalplayers.statements.{Invoice, Performance, StatementPrinter, Tragedy}
 import nl.codecraftr.scala.kata.theatricalplayers.text.TextStatementPrinter
 
 object TheatricalPlayers extends App {
