@@ -1,9 +1,10 @@
-package nl.codecraftr.scala.kata.theatricalplayers
+package nl.codecraftr.scala.kata.theatricalplayers.text
 
+import nl.codecraftr.scala.kata.theatricalplayers._
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 
-class StatementPrinterTest extends AnyFunSuite with Matchers {
+class TextStatementPrinterTest extends AnyFunSuite with Matchers {
   test("statement example") {
     val invoice = Invoice(
       "BigCo",
@@ -16,8 +17,7 @@ class StatementPrinterTest extends AnyFunSuite with Matchers {
       )
     )
 
-    val statementPrinter = new StatementPrinter()
-    val result = statementPrinter.print(invoice)
+    val result = TextStatementPrinter.print(invoice)
 
     result shouldBe
       """Statement for BigCo
