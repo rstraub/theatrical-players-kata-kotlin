@@ -64,7 +64,58 @@ class PerformanceTest
     }
   }
 
-  "total credits" should "calculate credits for a performance" in {
+  "credits" should "should not be earned for the first 30 persons" in {
+    val nonComedy = Table(
+      ("play", "audience"),
+      (aTragedy, 30),
+      (aTragedy, 1)
+    )
 
+    forAll(nonComedy) { (play, audience) =>
+      val performance = Performance(play, audience)
+      performance.totalCredits shouldBe 0
+    }
+  }
+
+  it should "earn one credit for every person over 30" in {
+    val nonComedy = Table(
+      ("play", "audience", "expectedCredits"),
+      (aTragedy, 31, 1),
+      (aTragedy, 40, 10)
+    )
+
+    forAll(nonComedy) { (play, audience, expected) =>
+      val performance = Performance(play, audience)
+      performance.totalCredits shouldBe expected
+    }
+  }
+
+  it should "earn 1 credit for every 5 persons given a comedy" in {
+    val comedy = Table(
+      ("audience", "expectedCredits"),
+      1 -> 0,
+      5 -> 1,
+      10 -> 2,
+      15 -> 3
+    )
+
+    forAll(comedy) { (audience, expected) =>
+      val performance = Performance(aComedy, audience)
+      performance.totalCredits shouldBe expected
+    }
+  }
+
+  it should "earn a credit for every person over 30 plus one credit for every 5 persons given a comedy" in {
+    val comedy = Table(
+      ("audience", "expectedCredits"),
+      31 -> (6 + 1),
+      35 -> (7 + 5),
+      40 -> (8 + 10)
+    )
+
+    forAll(comedy) { (audience, expected) =>
+      val performance = Performance(aComedy, audience)
+      performance.totalCredits shouldBe expected
+    }
   }
 }
