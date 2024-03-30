@@ -4,17 +4,12 @@ sealed trait Play {
   def name: String
 
   def calculateCosts(audience: Int): Int = {
-    var costs = 40000
-    if (audience > 30)
-      costs += 1000 * (audience - 30)
-    costs
+    val baseCosts = 40000
+    if (audience > 30) baseCosts + 1000 * (audience - 30)
+    else baseCosts
   }
 
-  def calculateCredits(audience: Int): Int = {
-    var playCredits = 0
-    playCredits += Math.max(audience - 30, 0)
-    playCredits
-  }
+  def calculateCredits(audience: Int): Int = Math.max(audience - 30, 0)
 }
 
 final case class Tragedy(name: String) extends Play
@@ -31,11 +26,8 @@ final case class Comedy(name: String) extends Play {
   }
 
   override def calculateCredits(audience: Int): Int = {
-    var playCredits = 0
-    // Add credits for every attendee above 30
-    playCredits += Math.max(audience - 30, 0)
-    // add extra credit for every ten comedy attendees
-    playCredits += Math.floor(audience / 5d).toInt
-    playCredits
+      // add extra credit for every ten comedy attendees
+      val bonusComedyCredits = Math.floor(audience / 5d).toInt
+      super.calculateCredits(audience) + bonusComedyCredits
   }
 }
