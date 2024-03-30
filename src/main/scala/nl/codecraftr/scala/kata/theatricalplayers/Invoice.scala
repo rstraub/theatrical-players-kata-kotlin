@@ -3,11 +3,11 @@ package nl.codecraftr.scala.kata.theatricalplayers
 final case class Invoice(customer: String, performances: List[Performance]) {
   lazy val totalCosts: Int =
     performances
-      .map(perf => perf.play.calculateCosts(perf.audience))
+      .map(_.totalCosts)
       .sum
 
   lazy val totalCredits: Int =
     performances
-      .map(perf => perf.play.calculateCredits(perf.audience))
+      .map(_.totalCredits)
       .sum
 }
